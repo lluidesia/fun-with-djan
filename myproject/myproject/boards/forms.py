@@ -3,7 +3,7 @@ from .models import Topic
 
 
 class NewTopicForm(forms.ModelForm):
-    message = forms.CharField(
+    new_message = forms.CharField(
         widget=forms.Textarea(
             attrs={'rows': 5, 'placeholder': 'What is on your mind?'}
         ),
@@ -13,5 +13,5 @@ class NewTopicForm(forms.ModelForm):
 
     class Meta:
         model = Topic
-        fields = ['subject', 'message']
+        fields = ['new_subject', 'new_message']
 
