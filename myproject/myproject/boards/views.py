@@ -25,7 +25,7 @@ def new_topic(request, pk):
             topic.starter = user
             topic.save()
             post = Post.objects.create(
-                message=form.cleaned_data.get('message'),
+                new_message=form.cleaned_data.get('new_message'),
                 topic=topic,
                 created_by=user
             )
