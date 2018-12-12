@@ -108,8 +108,8 @@ class NewTopicTests(TestCase):
     def test_new_topic_valid_post_data(self):
         url = reverse('new_topic', kwargs={'pk': 1})
         data = {
-            'subject': 'Test title',
-            'message': 'Lorem ipsum dolor sit amet'
+            'new_subject': 'Test title',
+            'new_message': 'Lorem ipsum dolor sit amet'
         }
         response = self.client.post(url, data)
         self.assertTrue(Topic.objects.exists())
@@ -155,4 +155,6 @@ class NewTopicTests(TestCase):
         form = response.context.get('form')
         self.assertEquals(response.status_code, 200)
         self.assertTrue(form.errors)
+
+
 
