@@ -57,3 +57,22 @@ class SuccessfulSignUpTests(TestCase):
         user = response.context.get('user')
         self.assertTrue(user.is_authenticated)
 
+
+class InvalidSignUpTests(TestCase):
+    def setUp(self):
+        url = reverse('signup')
+        self.response = self.client.post(url, {})  # submit an empty dictionary
+
+    def test_signup_status_code(self):
+        '''
+        Недійсна форма повинна повертати на ту саму сторінку
+        '''
+        self.assertEquals(self.response.status_code, 200)
+
+    def test_form_errors(self):
+        form = self.response.context.get('form')
+        self.assertTrue(form.errors)
+
+    def test_dont_create_user(self):
+        self.assertFalse(User.objects.exists())
+
