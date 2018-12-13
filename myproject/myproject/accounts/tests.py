@@ -1,7 +1,8 @@
 # from django.core.urlresolvers import reverse
 from django.urls import reverse
-from django.contrib.auth.forms import UserCreationForm
 from django.urls import resolve
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from django.test import TestCase
 from .views import signup
 
@@ -24,4 +25,35 @@ class SignUpTests(TestCase):
     def test_contains_form(self):
         form = self.response.context.get('form')
         self.assertIsInstance(form, UserCreationForm)
+
+
+class SuccessfulSignUpTests(TestCase):
+    def setUp(self):
+        url = reverse('signup')
+        data = {
+            'username': 'john',
+            'password1': 'abcdef123456',
+            'password2': 'abcdef123456'
+        }
+        self.response = self.client.post(url, data)
+        self.home_url = reverse('home')
+
+    def test_redirection(self):
+        '''
+        Дійсна форма повинна перенаправляти користувача на домашню сторінку
+        '''
+        self.assertRedirects(self.response, self.home_url)
+
+    def test_user_creation(self):
+        self.assertTrue(User.objects.exists())
+
+    def test_user_authentication(self):
+        '''
+         Створіть новий запит на довільну сторінку.
+Після успішної реєстрації отримана відповідь
+тепер має "user" у своєму контексті.
+        '''
+        response = self.client.get(self.home_url)
+        user = response.context.get('user')
+        self.assertTrue(user.is_authenticated)
 
